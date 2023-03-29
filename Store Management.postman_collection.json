@@ -49,7 +49,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n            \"title\": \"Aeropress\",\n            \"description\": \"A pour-over method, which means that the water passes through a bed of coffee and a filter.\",\n            \"price\": 26,\n            \"thumbnails\": \"Sin imagen\",\n            \"code\": \"coffeemaker4\",\n            \"stock\": 17,\n            \"status\": true,\n            \"category\": \"coffeemaker\"\n}\n",
+							"raw": "{\n    \"title\": \"Aeropress\",\n    \"description\": \"A pour-over method, which means that the water passes through a bed of coffee and a filter.\",\n    \"price\": 26,\n    \"thumbnails\": \"Sin imagen\",\n    \"code\": \"coffeemaker4\",\n    \"stock\": 17,\n    \"status\": true,\n    \"category\": \"coffeemaker\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -227,6 +227,68 @@
 								"api",
 								"carts",
 								"1679413770895"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products using Websocket",
+			"item": [
+				{
+					"name": "Add product ws",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Aeropress 2\",\n    \"description\": \"A pour-over method, which means that the water passes through a bed of coffee and a filter.\",\n    \"price\": 26,\n    \"thumbnails\": \"Sin imagen\",\n    \"code\": \"coffeemaker5\",\n    \"stock\": 17,\n    \"status\": true,\n    \"category\": \"coffeemaker\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/realtimeproducts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"realtimeproducts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete product ws",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/realtimeproducts/1680051208450",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"realtimeproducts",
+								"1680051208450"
 							]
 						}
 					},
