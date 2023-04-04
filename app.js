@@ -5,6 +5,7 @@ import __dirname from "./utils.js";
 import productsRoutes from "./src/routes/products.routes.js";
 import cartRoutes from "./src/routes/cart.routes.js";
 import viewsRoutes from "./src/routes/views.routes.js";
+import { products } from "./src/routes/views.routes.js";
 
 const app = express();
 const PORT = 8080;
@@ -26,4 +27,26 @@ const httpServer = app.listen(PORT, () =>
   console.log(`Server running on Port: ${PORT}`)
 );
 
-export const socketServer = new Server(httpServer);
+const socketServer = new Server(httpServer);
+
+socketServer.on("connection", (socket) => {
+  console.log("Cliente conectado");
+
+  socket.emit("list", { products });
+
+  socket.on("newProduct", (product) => {
+    products.push(product);
+    socket.emit("list", { products });
+  });
+
+  socket.on("deleteProduct", (id) => {
+    const productPosition = products.findIndex((e) => e.id === parseInt(id));
+
+    if (productPosition >= 0) {
+      products.splice(productPosition, 1);
+      socket.emit("list", { products });
+    } else {
+      console.log("Couldn't find the product to delete");
+    }
+  });
+});
