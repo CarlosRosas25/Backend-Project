@@ -1,0 +1,9 @@
+<div>
+    {{#each products}}
+    <div style="border: 1px solid black; padding: 5px">
+        <p>TITLE: {{this.product.title}} &nbsp; DESCRIPTION: {{this.product.description}}</p>
+        <p>PRICE: {{this.product.price}} &nbsp; QUANTITY: {{this.quantity}}</p>
+    </div>
+    <br/>
+    {{/each}}
+</div>

@@ -1,0 +1,22 @@
+<div>
+    {{#each docs}}
+    <div style="border: 1px solid black; padding: 5px">
+        <p>TITLE: {{this.title}} &nbsp; DESCRIPTION: {{this.description}}</p>
+        <p>PRICE: {{this.price}} &nbsp; STOCK: {{this.stock}}</p>
+        <button>Add to cart</button>
+    </div>
+    <br/>
+    {{/each}}
+</div>
+<br/>
+<div>
+    {{#if hasPrevPage}}
+        <a href={{this.prevLink}}>Anterior</a>
+    {{/if}}
+    &nbsp;
+    {{this.page}}
+    &nbsp;
+    {{#if hasNextPage}}
+        <a href={{this.nextLink}}>Siguiente</a>
+    {{/if}}
+</div>
