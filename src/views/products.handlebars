@@ -1,5 +1,9 @@
 <div>
-    {{#each docs}}
+    <h1>Welcome {{user.name}}</h1>
+    <p>Rol: {{user.rol}} &nbsp; <button id="Logout" type="click">Log out</button></p>
+</div>
+<div>
+    {{#each result.docs}}
     <div style="border: 1px solid black; padding: 5px">
         <p>TITLE: {{this.title}} &nbsp; DESCRIPTION: {{this.description}}</p>
         <p>PRICE: {{this.price}} &nbsp; STOCK: {{this.stock}}</p>
@@ -10,13 +14,15 @@
 </div>
 <br/>
 <div>
-    {{#if hasPrevPage}}
-        <a href={{this.prevLink}}>Anterior</a>
+    {{#if result.hasPrevPage}}
+        <a href={{this.result.prevLink}}>Anterior</a>
     {{/if}}
     &nbsp;
-    {{this.page}}
+    {{this.result.page}}
     &nbsp;
-    {{#if hasNextPage}}
-        <a href={{this.nextLink}}>Siguiente</a>
+    {{#if result.hasNextPage}}
+        <a href={{this.result.nextLink}}>Siguiente</a>
     {{/if}}
 </div>
+
+<script src="/js/logout.js"></script>

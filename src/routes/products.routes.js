@@ -66,7 +66,7 @@ productsRoutes.get("/", async (request, response) => {
     result.prevLink = result.hasPrevPage ? url.concat(`&page=${page - 1}`) : "";
     result.nextLink = result.hasNextPage ? url.concat(`&page=${page + 1}`) : "";
 
-    response.render("products", result);
+    response.render("products", { result: result, user: request.session.user });
 
     //Este código es para visualizar los productos en formato JSON con la información requerida inicialmente.
     /* response.send({
