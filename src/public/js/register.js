@@ -12,6 +12,14 @@ form.addEventListener("submit", (event) => {
       "Content-Type": "application/json",
     },
   })
-    .then((result) => result.json())
+    .then((result) => {
+      if (result.status === 201) {
+        result.json();
+        alert("User created successfully!!!");
+        window.location.replace("/users/login");
+      } else {
+        alert("Couldn't create user.");
+      }
+    })
     .then((json) => console.log(json));
 });

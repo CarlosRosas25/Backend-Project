@@ -1,5 +1,6 @@
 import { Router } from "express";
 import usersModel from "../models/users.model.js";
+import { createHash, isValidPassword } from "../../utils.js";
 
 const sessionsRouter = Router();
 
@@ -19,8 +20,7 @@ sessionsRouter.post("/register", async (request, response) => {
     last_name,
     email,
     age,
-    password,
-    rol: "user",
+    password: createHash(password),
   };
 
   const result = await usersModel.create(user);
@@ -32,9 +32,15 @@ sessionsRouter.post("/register", async (request, response) => {
 
 sessionsRouter.post("/login", async (request, response) => {
   const { email, password } = request.body;
-  const user = await usersModel.findOne({ email, password });
+  const user = await usersModel.findOne({ email });
 
   if (!user) {
+    return response
+      .status(401)
+      .send({ status: "error", error: "Invalid credentials" });
+  }
+
+  if (!isValidPassword(user, password)) {
     return response
       .status(401)
       .send({ status: "error", error: "Invalid credentials" });
