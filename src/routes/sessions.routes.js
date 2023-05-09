@@ -3,6 +3,34 @@ import passport from "passport";
 
 const sessionsRouter = Router();
 
+sessionsRouter.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  async (request, response) => {}
+);
+
+sessionsRouter.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/github/error" }),
+  async (request, response) => {
+    const user = request.user;
+
+    request.session.admin = false;
+
+    if (user.email === "adminCoder@coder.com") {
+      request.session.admin = true;
+    }
+
+    request.session.user = {
+      name: `${user.first_name} ${user.last_name}`,
+      email: user.email,
+      rol: `${request.session.admin ? "admin" : "user"}`,
+    };
+
+    response.redirect("/github");
+  }
+);
+
 sessionsRouter.post(
   "/register",
   passport.authenticate("register", {

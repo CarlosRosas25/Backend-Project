@@ -10,6 +10,7 @@ import productsRoutes from "./src/routes/products.routes.js";
 import cartRoutes from "./src/routes/cart.routes.js";
 import usersRouter from "./src/routes/users.routes.js";
 import sessionsRouter from "./src/routes/sessions.routes.js";
+import githubRouter from "./src/routes/github-login.routes.js";
 
 const app = express();
 const PORT = 8080;
@@ -46,6 +47,7 @@ app.use("/api/products", productsRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/users", usersRouter);
 app.use("/api/sessions", sessionsRouter);
+app.use("/github", githubRouter);
 
 app.listen(PORT, () => console.log(`Server running on Port: ${PORT}`));
 
