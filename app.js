@@ -4,13 +4,15 @@ import session from "express-session";
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import passport from "passport";
+import cookieParser from "cookie-parser";
 import initializePassport from "./src/config/passport.config.js";
 import __dirname from "./utils.js";
 import productsRoutes from "./src/routes/products.routes.js";
 import cartRoutes from "./src/routes/cart.routes.js";
 import usersRouter from "./src/routes/users.routes.js";
-import sessionsRouter from "./src/routes/sessions.routes.js";
+//import sessionsRouter from "./src/routes/sessions.routes.js";
 import githubRouter from "./src/routes/github-login.routes.js";
+import jwtRoutes from "./src/routes/jwt.routes.js";
 
 const app = express();
 const PORT = 8080;
@@ -39,6 +41,8 @@ app.use(
   })
 );
 
+app.use(cookieParser("CoderS3cr3tC0d3"));
+
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
@@ -46,8 +50,9 @@ app.use(passport.session());
 app.use("/api/products", productsRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/users", usersRouter);
-app.use("/api/sessions", sessionsRouter);
+//app.use("/api/sessions", sessionsRouter);
 app.use("/github", githubRouter);
+app.use("/api/jwt", jwtRoutes);
 
 app.listen(PORT, () => console.log(`Server running on Port: ${PORT}`));
 

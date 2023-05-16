@@ -1,13 +1,40 @@
 import passport from "passport";
 import passportLocal from "passport-local";
 import GitHubStrategy from "passport-github2";
+import jwtStrategy from "passport-jwt";
 import usersModel from "../models/users.model.js";
 import { createHash, isValidPassword } from "../../utils.js";
+import { PRIVATE_KEY } from "../../utils.js";
 
 //Declarar estrategia
 const localStrategy = passportLocal.Strategy;
 
+const JwtStrategy = jwtStrategy.Strategy;
+const ExtractJWT = jwtStrategy.ExtractJwt;
+
 const initializePassport = () => {
+  //Strategy JWT
+  passport.use(
+    "jwt",
+    new JwtStrategy(
+      {
+        //Extract cookie
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: PRIVATE_KEY,
+      },
+      async (jwt_payload, done) => {
+        try {
+          console.log("JWT got from payload");
+          console.log(jwt_payload);
+          return done(null, jwt_payload.user);
+        } catch (error) {
+          console.error(error);
+          return done(error);
+        }
+      }
+    )
+  );
+
   //Strategy Github
   passport.use(
     "github",
@@ -116,6 +143,18 @@ const initializePassport = () => {
       console.error("Error deserializing user: " + error);
     }
   });
+};
+
+//Function to extract cookie
+const cookieExtractor = (request) => {
+  let token = null;
+  if (request && request.cookies) {
+    console.log(request.cookies);
+    token = request.cookies["jwtCookieToken"];
+    console.log("Token got from cookie");
+    console.log(token);
+  }
+  return token;
 };
 
 export default initializePassport;

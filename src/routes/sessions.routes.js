@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
+import { generateJWToken } from "../../utils.js";
 
 const sessionsRouter = Router();
 
@@ -65,17 +66,21 @@ sessionsRouter.post(
       request.session.admin = true;
     }
 
-    request.session.user = {
+    /* request.session.user = {
       name: `${user.first_name} ${user.last_name}`,
       email: user.email,
       rol: `${request.session.admin ? "admin" : "user"}`,
-    };
+    }; */
 
-    response.send({
+    const access_token = generateJWToken(user);
+    console.log(access_token);
+
+    /* response.send({
       status: "success",
       payload: request.session.user,
       message: "First log in!!!!!",
-    });
+    }); */
+    response.send({ access_token: access_token });
   }
 );
 

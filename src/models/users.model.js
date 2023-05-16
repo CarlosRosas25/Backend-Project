@@ -6,27 +6,19 @@ const usersCollection = "users";
 //Schema
 const usersSchema = new mongoose.Schema(
   {
-    first_name: {
-      type: String,
-    },
-    last_name: {
-      type: String,
-    },
+    first_name: String,
+    last_name: String,
     email: {
       type: String,
       unique: true,
     },
-    age: {
-      type: Number,
-    },
-    password: {
+    age: Number,
+    password: String,
+    loggedBy: String,
+    role: {
       type: String,
-    },
-    rol: {
-      type: String,
-    },
-    loggedBy: {
-      type: String,
+      default: "user",
+      enum: ["user", "admin"],
     },
   },
   { timestamps: true }
