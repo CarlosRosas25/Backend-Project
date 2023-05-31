@@ -3,16 +3,16 @@
     <p>Rol: {{user.role}} &nbsp; <button id="Logout" type="click">Log out</button></p>
 </div>
 <div>
-    {{#each result.docs}}
+    {{#each result}}
     <div style="border: 1px solid black; padding: 5px">
-        <p>TITLE: {{this.title}} &nbsp; DESCRIPTION: {{this.description}}</p>
-        <p>PRICE: {{this.price}} &nbsp; STOCK: {{this.stock}}</p>
+        <p>TITLE: {{title}} &nbsp; DESCRIPTION: {{description}}</p>
+        <p>PRICE: {{price}} &nbsp; STOCK: {{stock}}</p>
         <button>Add to cart</button>
     </div>
     <br/>
     {{/each}}
 </div>
-<br/>
+{{!-- <br/>
 <div>
     {{#if result.hasPrevPage}}
         <a href={{this.result.prevLink}}>Anterior</a>
@@ -23,6 +23,6 @@
     {{#if result.hasNextPage}}
         <a href={{this.result.nextLink}}>Siguiente</a>
     {{/if}}
-</div>
+</div> --}}
 
 <script src="/js/logout.js"></script>

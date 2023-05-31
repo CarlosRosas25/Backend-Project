@@ -1,7 +1,6 @@
 import { Router } from "express";
 import usersModel from "../models/users.model.js";
-import { isValidPassword } from "../../utils.js";
-import { generateJWToken } from "../../utils.js";
+import { isValidPassword, generateJWToken, createHash } from "../../utils.js";
 
 const jwtRoutes = Router();
 
@@ -20,7 +19,7 @@ jwtRoutes.post("/login", async (request, response) => {
       });
     }
 
-    if (!isValidPassword) {
+    if (!isValidPassword(user, password)) {
       console.warn("Invalid credentials for user: " + email);
       return response.status(401).send({
         status: "error",
@@ -36,7 +35,7 @@ jwtRoutes.post("/login", async (request, response) => {
     };
 
     const access_token = generateJWToken(tokenUser);
-    console.log(access_token);
+    //console.log(access_token);
 
     response.cookie("jwtCookieToken", access_token, {
       maxAge: 60000,
@@ -50,6 +49,33 @@ jwtRoutes.post("/login", async (request, response) => {
       .status(500)
       .send({ status: "error", error: "Inside app error" });
   }
+});
+
+jwtRoutes.post("/register", async (request, response) => {
+  const { first_name, last_name, email, age, password } = request.body;
+
+  const exists = await usersModel.findOne({ email: email });
+  if (exists) {
+    return response
+      .status(401)
+      .send({ status: "error", message: "User already exists." });
+  }
+
+  const user = {
+    first_name,
+    last_name,
+    email,
+    age,
+    password: createHash(password),
+  };
+
+  const result = await usersModel.create(user);
+  response
+    .status(201)
+    .send({
+      status: "success",
+      message: "User created successfully with ID: " + result.id,
+    });
 });
 
 /* jwtRoutes.get("/logout", (request, response) => {
