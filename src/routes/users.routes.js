@@ -1,13 +1,22 @@
 import { Router } from "express";
+import UsersController from "../controllers/Users.js";
 
-const usersRouter = Router();
+const jwtUsersRoutes = Router();
 
-usersRouter.get("/login", (request, response) => {
-  response.render("login");
-});
+class UsersJwtRouter {
+  constructor() {
+    this.usersController = new UsersController();
+  }
 
-usersRouter.get("/register", (request, response) => {
-  response.render("register");
-});
+  start() {
+    jwtUsersRoutes.get("/login", this.usersController.viewLogin);
+    jwtUsersRoutes.get("/register", this.usersController.viewRegister);
+    jwtUsersRoutes.post("/login", this.usersController.verifyLogin);
+    jwtUsersRoutes.post("/register", this.usersController.createUser);
+    jwtUsersRoutes.get("/logout", this.usersController.logout);
 
-export default usersRouter;
+    return jwtUsersRoutes;
+  }
+}
+
+export default UsersJwtRouter;

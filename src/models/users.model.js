@@ -20,6 +20,10 @@ const usersSchema = new mongoose.Schema(
       default: "user",
       enum: ["user", "admin"],
     },
+    is_admin: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

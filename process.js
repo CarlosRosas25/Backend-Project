@@ -3,9 +3,9 @@ import { Command } from "commander";
 const program = new Command();
 
 program
-  .option("-d", "Variable para debug", false)
-  .option("-p <port>", "Puerto del server", 8080)
-  .option("--mode <mode>", "Modo de trabajo", "develop");
+  .option("-d", "Variable for debug", false)
+  .option("--persist <mode>", "Persistence mode", "mongodb")
+  .option("--mode <mode>", "Work mode", "development");
 
 program.parse();
 

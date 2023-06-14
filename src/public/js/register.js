@@ -5,7 +5,7 @@ form.addEventListener("submit", (event) => {
   const data = new FormData(form);
   const obj = {};
   data.forEach((value, key) => (obj[key] = value));
-  fetch("/api/jwt/register", {
+  fetch("/api/users/register", {
     method: "POST",
     body: JSON.stringify(obj),
     headers: {
@@ -15,7 +15,7 @@ form.addEventListener("submit", (event) => {
     if (result.status === 201) {
       result.json();
       alert("User created successfully!!!");
-      window.location.replace("/users/login");
+      window.location.replace("/api/users/login");
     } else if (result.status === 401) {
       alert("User already exists");
     }

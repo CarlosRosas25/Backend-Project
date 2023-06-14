@@ -23,6 +23,7 @@ const productsSchema = new mongoose.Schema(
       required: true,
       min: 1,
     },
+    thumbnail: String,
     code: {
       type: String,
       required: true,
@@ -30,6 +31,10 @@ const productsSchema = new mongoose.Schema(
     },
     stock: {
       type: Number,
+      required: true,
+    },
+    category: {
+      type: String,
       required: true,
     },
   },

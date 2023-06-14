@@ -10,7 +10,8 @@ dotenv.config({
 });
 
 export default {
-  port: process.env.PORT,
+  PORT: process.env.PORT || 8080,
+  PERSISTENCE: program.opts().persist,
   mongoUrl: process.env.MONGO_URL,
   adminEmail: process.env.ADMIN_EMAIL,
   adminPassword: process.env.ADMIN_PASSWORD,

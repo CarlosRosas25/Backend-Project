@@ -1,49 +1,42 @@
 import { Router } from "express";
-import cartsModel from "../models/carts.model.js";
-import productsModel from "../models/products.model.js";
+import CartsController from "../controllers/Carts.js";
+import { passportCall, authorization } from "../../utils.js";
 
-const cartRoutes = Router();
+const cartsRoutes = Router();
 
-cartRoutes.get("/", async (request, response) => {
-  try {
-    let carts = await cartsModel.find();
-    response.send(carts);
-  } catch (error) {
-    throw Error(`Error reading the orders. Error detail: ${error}`);
+class CartsRoutes {
+  constructor() {
+    this.cartsController = new CartsController();
   }
-});
 
-cartRoutes.get("/:cid", async (request, response) => {
-  try {
-    let cart = await cartsModel.findOne({ _id: request.params.cid }).lean();
+  start() {
+    cartsRoutes.get("/", this.cartsController.viewCarts);
+    cartsRoutes.post(
+      "/:pid",
+      passportCall("jwt"),
+      authorization(["user"]),
+      this.cartsController.addProductToNewCart
+    );
+    cartsRoutes.post(
+      "/:cid/product/:pid",
+      passportCall("jwt"),
+      authorization(["user"]),
+      this.cartsController.addProductToExistingCart
+    );
+    cartsRoutes.post(
+      "/:cid/purchase",
+      passportCall("jwt"),
+      authorization(["user"]),
+      this.cartsController.purchase
+    );
 
-    response.render("cart", cart);
-    //Este código es para visualizar los productos del carrito en formato JSON
-    //response.send(cart);
-  } catch (error) {
-    throw Error(`Error finding the cart. Error detail: ${error}`);
+    return cartsRoutes;
   }
-});
+}
 
-cartRoutes.post("/:pid", async (request, response) => {
-  try {
-    let productToAdd = await productsModel.findOne({
-      _id: request.params.pid,
-    });
+export default CartsRoutes;
 
-    let quantity = request.body.quantity;
-
-    let newCart = await cartsModel.create({
-      products: [{ product: productToAdd._id, quantity: quantity }],
-    });
-
-    await cartsModel.findOne({ _id: newCart._id }).populate("products");
-
-    response.send({ status: "Success", message: "Cart created successfully." });
-  } catch (error) {
-    throw Error(`Error adding the order. Error detail: ${error}`);
-  }
-});
+/* 
 
 cartRoutes.post("/:cid/product/:pid", async (request, response) => {
   try {
@@ -148,6 +141,4 @@ cartRoutes.put("/:cid/product/:pid", async (request, response) => {
       `Error updating the products from selected cart. Error detail: ${error}`
     );
   }
-});
-
-export default cartRoutes;
+}); */

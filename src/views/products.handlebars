@@ -1,5 +1,5 @@
 <div>
-    <h1>Welcome {{user.name}}</h1>
+    <h1>Welcome {{user.fullname}}</h1>
     <p>Rol: {{user.role}} &nbsp; <button id="Logout" type="click">Log out</button></p>
 </div>
 <div>
@@ -7,10 +7,26 @@
     <div style="border: 1px solid black; padding: 5px">
         <p>TITLE: {{title}} &nbsp; DESCRIPTION: {{description}}</p>
         <p>PRICE: {{price}} &nbsp; STOCK: {{stock}}</p>
-        <button>Add to cart</button>
+        {{#if ../user.isAdmin}}
+            <button>Edit</button> &nbsp; <button id="deleteButton" type="click">Delete</button>
+            {{else}}
+            <button>Add to cart</button>
+        {{/if}}
     </div>
     <br/>
     {{/each}}
+    {{#if user.isAdmin}}
+        <button>Add new product</button>
+        {{else}}
+        <div>
+            <div>
+                <p> Escribe un mensaje: <input id="chatBox" type="text"></p>
+            </div>
+            <div>
+                <p id="messageLogs"></p>
+            </div>
+        </div>
+    {{/if}}
 </div>
 {{!-- <br/>
 <div>
@@ -26,3 +42,7 @@
 </div> --}}
 
 <script src="/js/logout.js"></script>
+<script src="/js/delete.js"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/messages.js"></script>
