@@ -60,7 +60,6 @@ class CartsController {
             productId,
             productQuantity
           );
-          return true;
         } else {
           await this.cartsService.addProductToCart(
             cartId,
@@ -100,7 +99,9 @@ class CartsController {
         }
       });
 
-      //await this.ticketsService.createTicket(productsForTicket, request.user);
+      setTimeout(async () => {
+        await this.ticketsService.createTicket(productsForTicket, request.user);
+      }, "2000");
 
       response.send({
         status: "Success",
