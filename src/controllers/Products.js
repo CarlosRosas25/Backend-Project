@@ -1,4 +1,7 @@
 import ProductsService from "../services/Products.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/errors-enum.js";
+import { generateProductCreationErrorInfo } from "../services/errors/messages/product-creation-error.message.js";
 
 class ProductsController {
   constructor() {
@@ -36,10 +39,30 @@ class ProductsController {
   createProduct = async (request, response) => {
     try {
       const newProduct = request.body;
+
+      if (
+        !newProduct.title ||
+        !newProduct.description ||
+        !newProduct.price ||
+        !newProduct.stock
+      ) {
+        CustomError.createError({
+          name: "Product Creation Error",
+          cause: generateProductCreationErrorInfo({
+            title: newProduct.title,
+            description: newProduct.description,
+            price: newProduct.price,
+            stock: newProduct.stock,
+          }),
+          message: "Error creating new product",
+          code: EErrors.INVALID_TYPES_ERROR,
+        });
+      }
+
       await this.productsService.createProduct(newProduct);
       response.send({ status: "Success", message: "Product added." });
     } catch (error) {
-      throw Error(`Error adding the new product. Error detail: ${error}`);
+      response.status(500).send({ error: error.code, message: error.message });
     }
   };
 

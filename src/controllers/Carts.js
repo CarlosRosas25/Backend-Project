@@ -54,7 +54,7 @@ class CartsController {
       const cart = await this.cartsService.getCart(cartId);
 
       cart.products.find(async (product) => {
-        if (product.product.id === productId) {
+        if (product.product._id === productId) {
           await this.cartsService.updateCart(
             cartId,
             productId,

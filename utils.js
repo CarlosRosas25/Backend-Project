@@ -3,9 +3,21 @@ import { dirname } from "path";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import passport from "passport";
+import { faker } from "@faker-js/faker";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+//Faker
+export const generateProduct = () => {
+  return {
+    title: faker.commerce.productName(),
+    price: faker.commerce.price(),
+    stock: faker.string.numeric(),
+    id: faker.database.mongodbObjectId(),
+    image: faker.image.url(),
+  };
+};
 
 //Generar HASH
 export const createHash = (password) =>

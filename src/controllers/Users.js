@@ -1,5 +1,9 @@
 import UsersService from "../services/Users.js";
 import { isValidPassword, generateJWToken, createHash } from "../../utils.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/errors-enum.js";
+import { generateUserCreationErrorInfo } from "../services/errors/messages/user-creation-error.message.js";
+import { generateUserLoginErrorInfo } from "../services/errors/messages/user-login-error.message.js";
 
 class UsersController {
   constructor() {
@@ -18,6 +22,18 @@ class UsersController {
     try {
       const { email, password } = request.body;
       const user = await this.usersService.getUser(email);
+
+      if (!email || !password) {
+        CustomError.createError({
+          name: "User Login Error",
+          cause: generateUserLoginErrorInfo({
+            email,
+            password,
+          }),
+          message: "Error logging in",
+          code: EErrors.INVALID_TYPES_ERROR,
+        });
+      }
 
       if (!user) {
         console.warn("User doesn't exist with username: " + email);
@@ -52,7 +68,7 @@ class UsersController {
 
       response.send({ message: "Successful login" });
     } catch (error) {
-      return response.status(500).json({ error: error.message });
+      response.status(500).send({ error: error.code, message: error.message });
     }
   };
 
@@ -65,6 +81,20 @@ class UsersController {
         return response
           .status(401)
           .send({ status: "error", message: "User already exists." });
+      }
+
+      if (!first_name || !last_name || !email || !age) {
+        CustomError.createError({
+          name: "User Creation Error",
+          cause: generateUserCreationErrorInfo({
+            first_name,
+            last_name,
+            age,
+            email,
+          }),
+          message: "Error creating user",
+          code: EErrors.INVALID_TYPES_ERROR,
+        });
       }
 
       let user = {
@@ -90,7 +120,7 @@ class UsersController {
         message: "User created successfully with ID: " + result.id,
       });
     } catch (error) {
-      return response.status(500).json({ error: error.message });
+      response.status(500).send({ error: error.code, message: error.message });
     }
   };
 

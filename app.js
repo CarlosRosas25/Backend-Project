@@ -7,9 +7,11 @@ import __dirname from "./utils.js";
 import UsersJwtRouter from "./src/routes/users.routes.js";
 import ProductsRouter from "./src/routes/products.routes.js";
 import CartsRoutes from "./src/routes/carts.routes.js";
+import MockingProductsRouter from "./src/routes/mocks.routes.js";
 import githubRouter from "./src/routes/github-login.routes.js";
 import config from "./src/config/config.js";
 import { Server } from "socket.io";
+import errorHandler from "./src/services/errors/middlewares/index.js";
 
 const app = express();
 const SERVER_PORT = config.PORT;
@@ -31,11 +33,15 @@ app.use(passport.initialize());
 const usersRouter = new UsersJwtRouter();
 const productsRouter = new ProductsRouter();
 const cartsRouter = new CartsRoutes();
+const mocksRouter = new MockingProductsRouter();
 
 app.use("/api/users", usersRouter.start());
 app.use("/api/products", productsRouter.start());
 app.use("/api/carts", cartsRouter.start());
+app.use("/api/mockingproducts", mocksRouter.start());
 app.use("/github", githubRouter);
+
+app.use(errorHandler);
 
 const socketServer = new Server(
   app.listen(SERVER_PORT, () =>
