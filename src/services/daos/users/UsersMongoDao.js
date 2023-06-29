@@ -7,9 +7,6 @@ class UsersMongoDAO {
 
   getUser = async (email) => {
     const user = await this.collection.findOne({ email: email });
-    console.log("Usuario encontrado para login: ");
-    console.log(user);
-
     return user;
   };
 

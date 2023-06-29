@@ -36,7 +36,7 @@ class UsersController {
       }
 
       if (!user) {
-        console.warn("User doesn't exist with username: " + email);
+        request.logger.warning("User doesn't exist with username => " + email);
         return response.status(204).send({
           error: "Not found",
           message: "Couldn't find the username: " + email,
@@ -44,7 +44,7 @@ class UsersController {
       }
 
       if (!isValidPassword(user, password)) {
-        console.warn("Invalid credentials for user: " + email);
+        request.logger.warning("Invalid credentials for user => " + email);
         return response.status(401).send({
           status: "error",
           error: "Username and password don't match",

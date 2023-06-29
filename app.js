@@ -8,16 +8,19 @@ import UsersJwtRouter from "./src/routes/users.routes.js";
 import ProductsRouter from "./src/routes/products.routes.js";
 import CartsRoutes from "./src/routes/carts.routes.js";
 import MockingProductsRouter from "./src/routes/mocks.routes.js";
-import githubRouter from "./src/routes/github-login.routes.js";
+import LoggersRoutes from "./src/routes/loggers.routes.js";
+//import githubRouter from "./src/routes/github-login.routes.js";
 import config from "./src/config/config.js";
 import { Server } from "socket.io";
 import errorHandler from "./src/services/errors/middlewares/index.js";
+import { addLogger } from "./src/config/logger.js";
 
 const app = express();
 const SERVER_PORT = config.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(addLogger);
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/src/views");
@@ -34,12 +37,14 @@ const usersRouter = new UsersJwtRouter();
 const productsRouter = new ProductsRouter();
 const cartsRouter = new CartsRoutes();
 const mocksRouter = new MockingProductsRouter();
+const loggersRouter = new LoggersRoutes();
 
 app.use("/api/users", usersRouter.start());
 app.use("/api/products", productsRouter.start());
 app.use("/api/carts", cartsRouter.start());
 app.use("/api/mockingproducts", mocksRouter.start());
-app.use("/github", githubRouter);
+app.use("/loggerTest", loggersRouter.start());
+//app.use("/github", githubRouter);
 
 app.use(errorHandler);
 

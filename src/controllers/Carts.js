@@ -14,7 +14,7 @@ class CartsController {
       const carts = await this.cartsService.getCarts();
       response.send(carts);
     } catch (error) {
-      throw Error(`Error reading the orders. Error detail: ${error}`);
+      request.logger.error(`Error reading the orders. Error detail: ${error}`);
     }
   };
 
@@ -41,7 +41,7 @@ class CartsController {
         });
       }
     } catch (error) {
-      throw Error(`Error adding the order. Error detail: ${error}`);
+      request.logger.error(`Error adding the order. Error detail: ${error}`);
     }
   };
 
@@ -74,7 +74,9 @@ class CartsController {
         message: "Product added to cart order.",
       });
     } catch (error) {
-      throw Error(`Error adding the product to cart. Error detail: ${error}`);
+      request.logger.error(
+        `Error adding the product to cart. Error detail: ${error}`
+      );
     }
   };
 
@@ -108,7 +110,9 @@ class CartsController {
         message: "Successful purchase.",
       });
     } catch (error) {
-      throw Error(`Error purchasing the products. Error detail: ${error}`);
+      request.logger.error(
+        `Error purchasing the products. Error detail: ${error}`
+      );
     }
   };
 }

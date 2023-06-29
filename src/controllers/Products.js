@@ -32,7 +32,9 @@ class ProductsController {
       await this.productsService.deleteProduct(productId);
       response.send({ status: "Success", message: "Product deleted." });
     } catch (error) {
-      throw Error(`Error deleting the product. Error detail: ${error}`);
+      request.logger.error(
+        `Error deleting the product. Error detail: ${error}`
+      );
     }
   };
 
@@ -73,7 +75,9 @@ class ProductsController {
       await this.productsService.updateProduct(productId, productToUpdate);
       response.send({ status: "Success", message: "Product updated." });
     } catch (error) {
-      throw Error(`Error updating the product. Error detail: ${error}`);
+      request.logger.error(
+        `Error updating the product. Error detail: ${error}`
+      );
     }
   };
 }

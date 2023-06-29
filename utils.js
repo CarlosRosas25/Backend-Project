@@ -37,8 +37,7 @@ export const generateJWToken = (user) => {
 
 export const authToken = (request, response, next) => {
   const authHeader = request.headers.authorization;
-  console.log("Token present in header auth: ");
-  console.log(authHeader);
+  request.logger.info(`Token present in header auth: ${authHeader}`);
 
   if (!authHeader) {
     return response
@@ -53,7 +52,7 @@ export const authToken = (request, response, next) => {
         .status(403)
         .send({ error: "Token invalid, Unathorized!" });
     request.user = credentials.user;
-    console.log(request.user);
+    request.logger.info(request.user);
     next();
   });
 };
@@ -61,8 +60,7 @@ export const authToken = (request, response, next) => {
 //Para manejo de errores
 export const passportCall = (strategy) => {
   return async (request, response, next) => {
-    console.log("Calling strategy: ");
-    console.log(strategy);
+    request.logger.info(`Calling strategy => ${strategy}`);
     passport.authenticate(strategy, function (err, user, info) {
       if (err) return next(err);
       if (!user) {
@@ -70,7 +68,7 @@ export const passportCall = (strategy) => {
           .status(401)
           .send({ error: info.messages ? info.messages : info.toString() });
       }
-      console.log("User got from strategy: ");
+      request.logger.info("User got from strategy =>");
       console.log(user);
       request.user = user;
       next();

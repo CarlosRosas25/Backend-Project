@@ -1,5 +1,5 @@
 import passport from "passport";
-import GitHubStrategy from "passport-github2";
+//import GitHubStrategy from "passport-github2";
 import jwtStrategy from "passport-jwt";
 import usersModel from "../models/users.model.js";
 import { PRIVATE_KEY } from "../../utils.js";
@@ -31,8 +31,35 @@ const initializePassport = () => {
     )
   );
 
-  //Strategy Github
-  passport.use(
+  //Serialize and deserialize
+  passport.serializeUser((user, done) => {
+    done(null, user._id);
+  });
+
+  passport.deserializeUser(async (id, request, done) => {
+    try {
+      let user = await usersModel.findById(id);
+      done(null, user);
+    } catch (error) {
+      request.logger.error("Error deserializing user: " + error);
+    }
+  });
+};
+
+//Function to extract cookie
+const cookieExtractor = (request) => {
+  let token = null;
+  if (request && request.cookies) {
+    token = request.cookies["jwtCookieToken"];
+    request.logger.info(`Token got from cookie => ${token}`);
+  }
+  return token;
+};
+
+export default initializePassport;
+
+//Strategy Github
+/* passport.use(
     "github",
     new GitHubStrategy(
       {
@@ -71,33 +98,4 @@ const initializePassport = () => {
         }
       }
     )
-  );
-
-  //Serialize and deserialize
-  passport.serializeUser((user, done) => {
-    done(null, user._id);
-  });
-
-  passport.deserializeUser(async (id, done) => {
-    try {
-      let user = await usersModel.findById(id);
-      done(null, user);
-    } catch (error) {
-      console.error("Error deserializing user: " + error);
-    }
-  });
-};
-
-//Function to extract cookie
-const cookieExtractor = (request) => {
-  let token = null;
-  if (request && request.cookies) {
-    console.log(request.cookies);
-    token = request.cookies["jwtCookieToken"];
-    console.log("Token got from cookie");
-    console.log(token);
-  }
-  return token;
-};
-
-export default initializePassport;
+  ); */
